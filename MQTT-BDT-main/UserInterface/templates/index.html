@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fire Risk</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="topcontainer">
+        <h1>Fire Risk Detection System</h1>
+        <p>This system is created for educational purposes by Group 12 of the course "Big Data Technology" 2024, UniTn.</p>
+    </div>
+
+    <div class="container-wrapper">
+        
+        <div class="container">
+            <h1>SEARCH BY MUNICIPALITY</h1>
+            <form id="selectionForm" action="city-data" method="post">
+                <div class="form-group">
+                    <label for="region">Region:</label>
+                    <select id="region" name="region">
+                        <option value="">Select Region</option>
+                        {% for region in regions %}
+                            <option value="{{ region }}">{{ region }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="province">Province:</label>
+                    <select id="province" name="province" disabled>
+                        <option value="">Select Province</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="municipality">Municipality:</label>
+                    <select id="municipality" name="municipality" disabled>
+                        <option value="">Select Municipality</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="showButton">SHOW</button>
+            </form>
+        </div>
+
+        <div class="container">
+            <h1>CURRENT ALERTS</h1>
+            <table id="alertsTable">
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Alert Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alert in alerts %}
+                        <tr>
+                            <td>{{ alert.name }}</td>
+                            <td class="{{ alert.fwi_level|lower|replace(' ', '-') }}">{{ alert.fwi_level }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#region').change(function(){
+                var region = $(this).val();
+                if(region) {
+                    $.ajax({
+                        url: '/provinces/' + region,
+                        method: 'GET',
+                        success: function(data) {
+                            $('#province').empty().append('<option value="">Select Province</option>');
+                            $.each(data, function(index, value) {
+                                $('#province').append('<option value="'+ value +'">'+ value +'</option>');
+                            });
+                            $('#province').prop('disabled', false);
+                        }
+                    });
+                } else {
+                    $('#province').empty().append('<option value="">Select Province</option>').prop('disabled', true);
+                    $('#municipality').empty().append('<option value="">Select Municipality</option>').prop('disabled', true);
+                }
+            });
+
+            $('#province').change(function(){
+                var region = $('#region').val();
+                var province = $(this).val();
+                if(province) {
+                    $.ajax({
+                        url: '/municipalities/' + region + '/' + province,
+                        method: 'GET',
+                        success: function(data) {
+                            $('#municipality').empty().append('<option value="">Select Municipality</option>');
+                            $.each(data, function(index, value) {
+                                $('#municipality').append('<option value="'+ value +'">'+ value +'</option>');
+                            });
+                            $('#municipality').prop('disabled', false);
+                        }
+                    });
+                } else {
+                    $('#municipality').empty().append('<option value="">Select Municipality</option>').prop('disabled', true);
+                }
+            });
+
+            $('#showButton').click(function() {
+                var municipality = $('#municipality').val();
+                if (municipality) {
+                    $.ajax({
+                        url: '/city-data',
+                        method: 'POST',
+                        data: {'city': municipality},  // Send city name as 'city' in the request body
+                        success: function(data) {
+                            // Handle server response here, if necessary
+                            console.log(data);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle any errors here
+                            console.error(error);
+                        }
+                    });
+                } else {
+                    alert('Select a city before clicking SHOW.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

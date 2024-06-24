@@ -1,0 +1,216 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #005f6b;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+.legend-header {
+    text-align: center;
+    color: #333;
+}
+
+/* Styling for the current weather section */
+.current-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+ul {
+    width: 100%;
+    margin: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+ul li {
+    background: #e0f7fa;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px; 
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+/* Styling for fire risk */
+.fire-risk {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.fire-risk.low {
+    color: green;
+}
+
+.fire-risk.moderate {
+    color: orange;
+}
+
+.fire-risk.high {
+    color: red;
+}
+
+.fire-risk.very-high {
+    color: darkred;
+}
+
+.fire-risk.extreme {
+    color: purple;
+}
+
+/* Styling for the forecast table */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background: #00796b;
+    color: #fff;
+}
+
+thead th {
+    padding: 10px;
+}
+
+tbody tr:nth-child(even) {
+    background: #f0f8ff;
+}
+
+tbody tr:hover {
+    background: #e0f7fa;
+}
+
+tbody td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody td.fire-risk.low {
+    background-color: green;
+    color: white;
+}
+
+tbody td.fire-risk.moderate {
+    background-color: orange;
+    color: white;
+}
+
+tbody td.fire-risk.high {
+    background-color: red;
+    color: white;
+}
+
+tbody td.fire-risk.very-high {
+    background-color: darkred;
+    color: white;
+}
+
+tbody td.fire-risk.extreme {
+    background-color: purple;
+    color: white;
+}
+
+#backButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #cc4545;
+    color: #fff;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#textcity {
+    color: #cc4545;
+}
+
+/* Styling for the legend */
+.legend {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+.legend.horizontal {
+    display: flex;
+    justify-content: center;
+}
+
+.legend li {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.legend .low {
+    background: green;
+}
+
+.legend .moderate {
+    background: orange;
+}
+
+.legend .high {
+    background: red;
+}
+
+.legend .very-high {
+    background: darkred;
+}
+
+.legend .extreme {
+    background: purple;
+}
+
+.highlighted-fire-risk {
+    background-color: #effeff; 
+    padding: 10px;
+    border: 2px solid #00e1ff; 
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 179, 255, 0.5); 
+    margin-bottom: 20px; 
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+.highlighted-fire-risk .fire-risk {
+    font-size: 1.5em; /* Aumenta la dimensione del testo */
+    font-weight: bold; /* Grassetto per il testo */
+}

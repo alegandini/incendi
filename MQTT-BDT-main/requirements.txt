@@ -1,0 +1,6 @@
+flask
+numpy
+paho-mqtt
+pyyaml
+requests
+pymongo

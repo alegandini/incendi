@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  mqtt_broker:
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+      - "9002:9001"  # Cambia la porta host in 9002
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  web:
+    build: .
+    command: python UserInterface/ui_flask.py
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mqtt_broker
+      - dask_scheduler
+
+  data_fetcher:
+    build: .
+    command: python DataFetcher/data_fetcher.py
+    volumes:
+      - .:/app
+    depends_on:
+      - mqtt_broker
+      - mongo
+
+  data_processor:
+    build: .
+    command: python DataProcessor/data_processor.py
+    volumes:
+      - .:/app
+    depends_on:
+      - mqtt_broker
+      - mongo
+      - dask_scheduler
+
+  mqtt_debug:
+    build: .
+    command: python mqtt_debug.py
+    volumes:
+      - .:/app
+    depends_on:
+      - mqtt_broker
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  dask_scheduler:
+    image: daskdev/dask:latest
+    command: dask-scheduler
+    ports:
+      - "8786:8786"
+      - "8787:8787"
+    networks:
+      - prova-main_bigdata-network
+
+  dask_worker:
+    image: daskdev/dask:latest
+    command: dask-worker tcp://dask_scheduler:8786
+    networks:
+      - prova-main_bigdata-network
+    depends_on:
+      - dask_scheduler
+
+  dask_processor:
+    build: .
+    command: python dask_processor.py
+    volumes:
+      - .:/app
+    depends_on:
+      - dask_scheduler
+      - mqtt_broker
+
+networks:
+  bigdata-network:
+    driver: bridge

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ city }} Weather Data</title>
+    <link rel="stylesheet" href="/static/style_forecast.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <a id="backButton" onclick="history.back()">CHOOSE ANOTHER CITY</a>
+    <h1 id="textcity"> {{city}} </h1> 
+
+    <h2>Current Weather</h2>
+    <div class="highlighted-fire-risk">
+        <p class="fire-risk {{ fwi_current[1]|lower }}">Current risk of fire: 
+            <span class="legend {{ fwi_current[1]|lower }}">{{ fwi_current[1] }}</span>
+        </p>
+    </div>    
+    <ul>
+        <li>Temperature: {{ current_data.temperature }} °C</li>
+        <li>Humidity: {{ current_data.humidity }} %</li>
+        <li>Wind Speed: {{ current_data.wind_speed }} m/s</li>
+        <li>Rain: {{ current_data.rain }} mm</li>
+    </ul>
+
+    <h2>Forecast</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date and Time</th>
+                <th>Temperature (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Wind Speed (m/s)</th>
+                <th>Rain (mm)</th>
+                <th>Fire Risk</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for forecast in forecast_data %}
+                <tr>
+                    <td>{{ forecast_time[loop.index0] }}</td>
+                    <td>{{ forecast[0] }}</td>
+                    <td>{{ forecast[1] }}</td>
+                    <td>{{ forecast[2] }}</td>
+                    <td>{{ forecast[3] }}</td>
+                    <td class="fire-risk {{ fwi_forecast[loop.index0][1]|lower }}">{{ fwi_forecast[loop.index0][1] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="legend-header">Fire Risk Legend</h3>
+    <ul class="legend horizontal">
+        <li class="low">Low: < 11.2</li>
+        <li class="moderate">Moderate: 11.2 - 21.3</li>
+        <li class="high">High: 21.3 - 38</li>
+        <li class="very-high">Very High: 38 - 50</li>
+        <li class="extreme">Extreme: > 50</li>
+    </ul>
+
+</body>
+</html>
